@@ -1,5 +1,5 @@
 {
- "name": "@sagni-amsalu/say-auth",
+ "name": "say-auth",
   "version": "1.0.0",
   "description": "Enterprise-grade authentication library for Next.js with MFA, RBAC, and security features",
   "main": "dist/index.js",
@@ -40,8 +40,7 @@
     "security": "npm audit"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public"
   },
   "peerDependencies": {
     "axios": ">=1.6.0",
