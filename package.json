@@ -83,12 +83,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sanyii/auth-library.git"
+    "url": "git+https://github.com/sagni-amsalu/say-auth-git.git"
   },
   "bugs": {
-    "url": "https://github.com/sanyii/auth-library/issues"
+    "url": "https://github.com/sagni-amsalu/say-auth-git/issues"
   },
-  "homepage": "https://github.com/sanyii/auth-library#readme",
+  "homepage": "https://github.com/sagni-amsalu/say-auth-git#readme",
   "keywords": [
     "auth",
     "authentication",
@@ -107,7 +107,7 @@
   "author": {
     "name": "Sanyii",
     "email": "sanyii@itech.com",
-    "url": "https://github.com/sanyii"
+    "url": "https://github.com/sagni-amsalu"
   },
   "license": "MIT",
   "engines": {

@@ -1,18 +1,29 @@
 # Changelog
 
-## [1.0.0] - 2024-01-01
+All notable changes to this project will be documented in this file.
+
+## [1.0.0] - 2024-04-04
 
 ### Added
-- Initial release
-- JWT authentication
-- MFA support
-- Token blacklisting
-- Audit logging
-- Rate limiting
-- Device fingerprinting
-- Session management
+- 🔐 JWT authentication with auto-refresh
+- 🛡️ MFA (2FA) support with TOTP
+- 🚫 Token blacklisting on logout
+- 📝 Audit logging system
+- 🖥️ Device fingerprinting
+- ⚡ Rate limiting protection
+- 🔒 AES-256 encrypted storage
+- 📦 Zero-config setup
+- 🎯 Full TypeScript support
 
 ### Security
-- AES-256 encryption for tokens
-- Secure token storage
-- Request interceptors with auto-refresh
+- Secure token storage with encryption
+- Request queuing during token refresh
+- Session management with device tracking
+
+## [Unreleased]
+
+### Planned
+- Social login providers (Google, GitHub)
+- Passwordless authentication
+- WebAuthn/Passkey support
+- Admin dashboard UI components
