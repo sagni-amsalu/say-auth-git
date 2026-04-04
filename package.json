@@ -1,0 +1,118 @@
+{
+ "name": "@sagni-amsalu/say-auth",
+  "version": "1.0.0",
+  "description": "Enterprise-grade authentication library for Next.js with MFA, RBAC, and security features",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./react-native": "./dist/native/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --external react --external next --external axios",
+    "build:native": "tsup src/native/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react --external next --external axios",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "jest --config jest.e2e.config.js",
+    "benchmark": "ts-node scripts/benchmark.ts",
+    "analyze": "webpack-bundle-analyzer dist/stats.json",
+    "precommit": "lint-staged",
+    "docs": "typedoc",
+    "security": "npm audit"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "peerDependencies": {
+    "axios": ">=1.6.0",
+    "next": ">=13.0.0",
+    "react": ">=18.0.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "lucide-react": "^1.7.0",
+    "otpauth": "^9.2.0",
+    "qrcode": "^1.5.3",
+    "rfc4648": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.0",
+    "@types/jest": "^29.5.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.1.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanyii/auth-library.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanyii/auth-library/issues"
+  },
+  "homepage": "https://github.com/sanyii/auth-library#readme",
+  "keywords": [
+    "auth",
+    "authentication",
+    "nextjs",
+    "react",
+    "react-native",
+    "mfa",
+    "2fa",
+    "totp",
+    "jwt",
+    "refresh-token",
+    "rbac",
+    "security",
+    "typescript"
+  ],
+  "author": {
+    "name": "Sanyii",
+    "email": "sanyii@example.com",
+    "url": "https://github.com/sanyii"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
