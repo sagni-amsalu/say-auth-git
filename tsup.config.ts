@@ -2,17 +2,14 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['esm'],
+  format: ['cjs', 'esm'],  // Both formats for compatibility
   dts: true,
   clean: true,
   external: ['react', 'react-dom', 'next', 'axios'],
-  target: 'es2022',
+  target: 'es2020',
   platform: 'browser',
-  splitting: false,
-  sourcemap: true,
-  treeshake: true,
   esbuildOptions(options) {
-    // Force "use client" at the very top of the output
+    // This MUST be here
     options.banner = {
       js: '"use client";\n'
     };
