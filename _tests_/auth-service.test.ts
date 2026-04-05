@@ -16,8 +16,8 @@
   
 //   test('should handle login correctly', async () => {
 //     const result = await authService.login({
-//       email: 'test@example.com',
-//       password: 'password123',
+//       email: 'sagni@itech.com',
+//       password: 'password',
 //     });
 //     expect(result).toHaveProperty('user');
 //   });

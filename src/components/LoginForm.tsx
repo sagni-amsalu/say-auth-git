@@ -67,7 +67,7 @@ export function LoginForm({ onSubmit, isLoading = false, error, className }: Log
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                placeholder="john@example.com"
+                placeholder="sagni@itech.com"
                 autoComplete="email"
                 disabled={isLoading}
               />
