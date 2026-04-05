@@ -1,3 +1,4 @@
+'use client';
 // src/index.ts
 
 // Types

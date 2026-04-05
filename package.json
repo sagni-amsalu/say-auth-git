@@ -1,6 +1,6 @@
 {
   "name": "say-auth",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Enterprise-grade authentication library for Next.js with MFA, RBAC, and security features",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -23,9 +23,9 @@
     "EXAMPLES.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --external react --external react-dom --external next --external axios --target es2020",
+    "build": "tsup",
     "build:native": "tsup src/native/index.ts --format cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react --external react-dom --external next --external axios --target es2020",
+    "dev": "tsup --watch",
     "prepublishOnly": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -46,8 +46,22 @@
   "peerDependencies": {
     "axios": ">=1.6.0",
     "next": ">=13.0.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    },
+    "next": {
+      "optional": true
+    },
+    "axios": {
+      "optional": false
+    }
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
@@ -92,7 +106,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sagni-amsalu/say-auth-git.git"
+    "url": "git+https://github.com/sagni-amsalu/say-auth.git"
   },
   "bugs": {
     "url": "https://github.com/sagni-amsalu/say-auth/issues"

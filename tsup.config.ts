@@ -11,6 +11,7 @@ export default defineConfig({
   clean: true,
   external: ['react', 'react-dom', 'next', 'axios'],
   target: 'es2020',
+  platform: 'browser',
   esbuildOptions(options) {
     options.banner = {
       js: '"use client";'
