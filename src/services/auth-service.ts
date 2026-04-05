@@ -8,7 +8,7 @@ import { RateLimiter } from './rate-limiter';
 import { AuditLogger, AuditAction } from './audit-logger';
 import { SessionManager } from './session-manager';
 import { DeviceFingerprint } from './device-fingerprint';
-import { AuthState, LoginCredentials, RegisterData, User } from '../types';
+import { AuthState, LoginCredentials, MFASetup, RegisterData, User } from '../types';
 import { API_ENDPOINTS } from '../utils/constants';
 
 export class AuthService {
@@ -398,4 +398,20 @@ export class AuthService {
   getState(): AuthState {
     return { ...this.state };
   }
+
+  // Add to src/services/auth-service.ts
+
+async setupMFA(): Promise<MFASetup> {
+  const response:any = await this.makeRequest('POST', API_ENDPOINTS.mfaSetup);
+  return response.data;
+}
+
+async disableMFA(code: string): Promise<void> {
+  await this.makeRequest('POST', API_ENDPOINTS.mfaDisable, { code });
+}
+
+async updateUser(userData: Partial<User>): Promise<User> {
+  const response:any = await this.makeRequest('PUT', '/users/profile', userData);
+  return response.data;
+}
 }

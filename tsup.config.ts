@@ -1,13 +1,21 @@
-// tsup.config.ts
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: {
+    index: 'src/index.ts',
+  },
   format: ['cjs', 'esm'],
   dts: true,
-  clean: true,
-  external: ['react', 'next', 'axios'],
-  treeshake: true,
-  sourcemap: true,
   splitting: false,
+  sourcemap: true,
+  clean: true,
+  external: ['react', 'react-dom', 'next', 'axios'],
+  target: 'es2020',
+  esbuildOptions(options) {
+    options.banner = {
+      js: '"use client";'
+    };
+  },
+  treeshake: true,
+  minify: false,
 });

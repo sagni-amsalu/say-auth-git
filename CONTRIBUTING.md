@@ -1,38 +1,31 @@
 # Contributing to say-auth
 
-We love your input! We want to make contributing to this project as easy and transparent as possible.
+We love your input! We want to make contributing to say-auth as easy and transparent as possible.
 
 ## Development Process
 
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/amazing`)
-3. Make your changes
-4. Run tests (`pnpm test`)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to branch (`git push origin feature/amazing`)
-7. Open a Pull Request
+1. Fork the repo and create your branch from `main`.
+2. If you've added code that should be tested, add tests.
+3. If you've changed APIs, update the documentation.
+4. Ensure the test suite passes.
+5. Make sure your code lints.
+6. Issue that pull request!
 
 ## Development Setup
 
 ```bash
-git clone https://github.com/sagni-amsalu/say-auth-git.git
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/say-auth.git
 cd say-auth
-pnpm install
-pnpm build
-pnpm test
-Pull Request Process
-Update the README.md with details of changes if needed
 
-Update the CHANGELOG.md with your changes
+# Install dependencies
+npm install
 
-The PR will be merged once you have the sign-off of maintainers
+# Build the library
+npm run build
 
-Code of Conduct
-Our Pledge
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone.
+# Run tests
+npm test
 
-Our Responsibilities
-Project maintainers have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct.
+# Run in development mode
+npm run dev

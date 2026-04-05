@@ -3,15 +3,20 @@
 
 import { useProtectedRoute } from "../hooks/useProtectedRoute";
 
-
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: string | string[];
   fallback?: React.ReactNode;
+  redirectTo?: string;
 }
 
-export function ProtectedRoute({ children, requiredRole, fallback }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useProtectedRoute('/login', requiredRole);
+export function ProtectedRoute({ 
+  children, 
+  requiredRole, 
+  fallback,
+  redirectTo = '/login' 
+}: ProtectedRouteProps) {
+  const { isAuthenticated, isLoading } = useProtectedRoute(redirectTo, requiredRole);
 
   if (isLoading) {
     return (
@@ -22,7 +27,7 @@ export function ProtectedRoute({ children, requiredRole, fallback }: ProtectedRo
   }
 
   if (!isAuthenticated) {
-    return null;
+    return fallback || null;
   }
 
   return <>{children}</>;

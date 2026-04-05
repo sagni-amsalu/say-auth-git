@@ -1,29 +1,30 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to the say-auth library will be documented in this file.
 
-## [1.0.0] - 2024-04-04
+## [1.0.0] - 2024-01-XX
 
 ### Added
-- 🔐 JWT authentication with auto-refresh
-- 🛡️ MFA (2FA) support with TOTP
-- 🚫 Token blacklisting on logout
-- 📝 Audit logging system
-- 🖥️ Device fingerprinting
-- ⚡ Rate limiting protection
-- 🔒 AES-256 encrypted storage
-- 📦 Zero-config setup
-- 🎯 Full TypeScript support
+- Initial release of say-auth
+- JWT authentication with refresh tokens
+- MFA/2FA support with TOTP
+- Role-Based Access Control (RBAC)
+- Auto token refresh mechanism
+- Rate limiting for login attempts
+- Audit logging for security events
+- Session management across devices
+- Token blacklisting for secure logout
+- Device fingerprinting for trusted devices
+- Secure encrypted token storage
+- React hooks: `useAuth`, `useProtectedRoute`
+- Components: `AuthProvider`, `ProtectedRoute`, `MFASetup`, `MFAVerification`, `SessionWarning`
+- TypeScript support with full type definitions
+- Next.js 13+ App Router support
+- React 16.8+ through 19 compatibility
 
 ### Security
-- Secure token storage with encryption
-- Request queuing during token refresh
-- Session management with device tracking
-
-## [Unreleased]
-
-### Planned
-- Social login providers (Google, GitHub)
-- Passwordless authentication
-- WebAuthn/Passkey support
-- Admin dashboard UI components
+- AES-256 encryption for stored tokens
+- XSS protection headers
+- CSRF protection
+- Secure HTTP-only cookie support
+- Rate limiting against brute force attacks
