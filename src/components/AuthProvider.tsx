@@ -3,10 +3,9 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { AuthService } from '../services/auth-service';
-import { AUTH_CONFIG, STORAGE_KEYS } from '../utils/constants';
+import { AUTH_CONFIG } from '../utils/constants';
 import { 
-  User, 
-  AuthTokens, 
+  User,  
   LoginCredentials, 
   RegisterData, 
   AuthState,
@@ -421,7 +420,7 @@ export function ProtectedRoute({
   redirectTo = '/login',
   requireMFA = false
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, hasRole, user, error } = useAuthContext();
+  const { isAuthenticated, isLoading, hasRole, user} = useAuthContext();
   
   if (isLoading) {
     return (

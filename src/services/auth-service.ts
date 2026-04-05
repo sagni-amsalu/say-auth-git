@@ -7,7 +7,7 @@ import { MFAService } from './mfa-service';
 import { RateLimiter } from './rate-limiter';
 import { AuditLogger, AuditAction } from './audit-logger';
 import { SessionManager } from './session-manager';
-import { DeviceFingerprint } from './device-fingerprint';
+// import { DeviceFingerprint } from './device-fingerprint';
 import { AuthState, LoginCredentials, MFASetup, RegisterData, User } from '../types';
 import { API_ENDPOINTS } from '../utils/constants';
 

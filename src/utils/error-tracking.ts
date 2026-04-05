@@ -4,16 +4,16 @@ export interface ErrorTracker {
   captureMessage(message: string, context?: Record<string, any>): void;
 }
 
-class SentryTracker implements ErrorTracker {
-  captureException(error: Error, context?: Record<string, any>): void {
-    // Integrate with Sentry
-    console.error('Sentry:', error, context);
-  }
+// class SentryTracker implements ErrorTracker {
+//   captureException(error: Error, context?: Record<string, any>): void {
+//     // Integrate with Sentry
+//     console.error('Sentry:', error, context);
+//   }
   
-  captureMessage(message: string, context?: Record<string, any>): void {
-    console.error('Sentry Message:', message, context);
-  }
-}
+//   captureMessage(message: string, context?: Record<string, any>): void {
+//     console.error('Sentry Message:', message, context);
+//   }
+// }
 
 class LoggingTracker implements ErrorTracker {
   captureException(error: Error, context?: Record<string, any>): void {

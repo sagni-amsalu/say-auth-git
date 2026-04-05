@@ -132,7 +132,6 @@ export class SecureTokenStorage {
     
     // Check if versioned format exists
     if (decrypted.timestamp) {
-      const tokenAge = Date.now() - decrypted.timestamp;
       const REFRESH_THRESHOLD = 5 * 60 * 1000; // 5 minutes before expiry
       
       // Get token expiry from the actual token
