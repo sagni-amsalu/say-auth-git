@@ -1,6 +1,6 @@
 {
   "name": "say-auth",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Enterprise-grade authentication library for Next.js with MFA, RBAC, and security features",
   "type": "module",
   "main": "dist/index.mjs",
