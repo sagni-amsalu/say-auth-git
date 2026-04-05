@@ -1,6 +1,29 @@
 # Changelog
 
-All notable changes to the say-auth library will be documented in this file.
+## [1.1.0] - 2024-01-XX
+
+### Added
+- New `useAuthContext` hook for better React 19 compatibility
+- Added `LoginForm` component with built-in validation
+- Added `MFAVerification` component for 2FA flows
+- Added `SessionWarning` component for session expiry notifications
+- Added `setupAuthInterceptors` for automatic token refresh
+- Added environment validation utilities
+- Added error tracking integration support
+- Added security headers utility
+- Added comprehensive TypeScript types
+
+### Changed
+- Improved React 16.8+ through 19 compatibility
+- Enhanced token storage with versioning and migration support
+- Better error messages and debugging information
+- Improved performance with memoized context values
+
+### Fixed
+- Fixed `createContext` error in React 19
+- Fixed token refresh race conditions
+- Fixed MFA verification timing issues
+- Fixed localStorage SSR issues
 
 ## [1.0.0] - 2024-01-XX
 
@@ -17,14 +40,6 @@ All notable changes to the say-auth library will be documented in this file.
 - Device fingerprinting for trusted devices
 - Secure encrypted token storage
 - React hooks: `useAuth`, `useProtectedRoute`
-- Components: `AuthProvider`, `ProtectedRoute`, `MFASetup`, `MFAVerification`, `SessionWarning`
+- Components: `AuthProvider`, `ProtectedRoute`, `MFASetup`
 - TypeScript support with full type definitions
 - Next.js 13+ App Router support
-- React 16.8+ through 19 compatibility
-
-### Security
-- AES-256 encryption for stored tokens
-- XSS protection headers
-- CSRF protection
-- Secure HTTP-only cookie support
-- Rate limiting against brute force attacks
