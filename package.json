@@ -1,52 +1,34 @@
 {
   "name": "say-auth",
-  "version": "1.5.0",
-  "description": "Enterprise-grade authentication library for Next.js with MFA, RBAC, and security features",
+  "version": "1.6.0",
   "type": "module",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      }
     }
   },
   "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
+    "dist"
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "prepublishOnly": "npm run build",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish"
-  },
-  "publishConfig": {
-    "access": "public"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "axios": ">=1.6.0",
-    "next": ">=13.0.0",
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
-  },
-  "peerDependenciesMeta": {
-    "axios": {
-      "optional": false
-    },
-    "next": {
-      "optional": true
-    },
-    "react": {
-      "optional": false
-    },
-    "react-dom": {
-      "optional": false
-    }
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "next": ">=13.0.0",
+    "axios": ">=1.6.0"
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
@@ -56,9 +38,6 @@
     "rfc4648": "^1.5.4"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.2.0",
-    "@types/node": "^25.5.2",
-    "@types/qrcode": "^1.5.6",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "react": "^18.3.1",
@@ -66,20 +45,6 @@
     "tsup": "^8.0.0",
     "typescript": "^5.3.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sagni-amsalu/say-auth.git"
-  },
-  "keywords": [
-    "auth",
-    "nextjs",
-    "react",
-    "mfa",
-    "2fa",
-    "jwt",
-    "rbac",
-    "typescript"
-  ],
   "license": "MIT",
   "sideEffects": false
 }
