@@ -11,6 +11,7 @@ import {
   AuthState,
   MFASetup,
 } from '../types';
+import { AuditLogger } from '../services/audit-logger';
 
 // ============= Extended Types for Provider =============
 interface AuthContextValue extends AuthState {
@@ -45,6 +46,7 @@ interface AuthProviderProps {
   onLogout?: () => void;
   autoRefresh?: boolean;
   refreshThreshold?: number;
+   enableAudit?: boolean;  
 }
 
 // ============= Context Creation =============
@@ -59,6 +61,7 @@ export function AuthProvider({
   onLogin,
   onLogout,
   autoRefresh = true,
+   enableAudit = true,
   refreshThreshold = AUTH_CONFIG.tokenRefreshThreshold
 }: AuthProviderProps) {
   const [state, setState] = useState<AuthState>({
@@ -74,6 +77,12 @@ export function AuthProvider({
 
   // Get auth service instance
   const authService = useMemo(() => AuthService.getInstance(apiUrl), [apiUrl]);
+
+    // ✅ Set audit enabled/disabled
+  useEffect(() => {
+    authService.setAuditEnabled(enableAudit);
+    AuditLogger.getInstance().setEnabled(enableAudit);
+  }, [authService, enableAudit]);
 
   // Subscribe to auth state changes
   useEffect(() => {

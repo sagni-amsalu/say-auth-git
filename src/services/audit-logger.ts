@@ -28,6 +28,7 @@ export class AuditLogger {
   private static instance: AuditLogger;
   private logQueue: AuditEntry[] = [];
   private isFlushing = false;
+    private enabled: boolean = true;  // ✅ Enable/disable flag
 
   static getInstance(): AuditLogger {
     if (!AuditLogger.instance) {
@@ -36,7 +37,23 @@ export class AuditLogger {
     return AuditLogger.instance;
   }
 
+    // ✅ Set enabled state
+  setEnabled(enabled: boolean): void {
+    this.enabled = enabled;
+  }
+
+  // ✅ Check if enabled
+  isEnabled(): boolean {
+    return this.enabled;
+  }
+
   async log(entry: Omit<AuditEntry, 'timestamp' | 'ipAddress' | 'userAgent'>): Promise<void> {
+
+      // ✅ Skip if disabled
+    if (!this.enabled) {
+      return;
+    }
+
     const fullEntry: AuditEntry = {
       ...entry,
       timestamp: new Date(),
@@ -54,7 +71,8 @@ export class AuditLogger {
   }
 
   private async flush(): Promise<void> {
-    if (this.logQueue.length === 0) return;
+    // if (this.logQueue.length === 0) return;
+      if (this.logQueue.length === 0 || !this.enabled) return;  // ✅ Skip if disabled
     
     this.isFlushing = true;
     const entries = [...this.logQueue];
@@ -68,10 +86,12 @@ export class AuditLogger {
         keepalive: true,
       });
     } catch (error) {
-      this.logQueue.unshift(...entries);
+      // this.logQueue.unshift(...entries);
+       // Silently fail - don't re-queue to avoid infinite loops
+      console.debug('Audit log failed:', error);
     } finally {
-      this.isFlushing = false;
-      if (this.logQueue.length > 0) {
+       this.isFlushing = false;
+      if (this.logQueue.length > 0 && this.enabled) {
         this.scheduleFlush();
       }
     }
