@@ -9,22 +9,23 @@ export const STORAGE_KEYS = {
   sessionId: 'say_auth_session_id',
 } as const;
 
+// ✅ FIX: Remove /api/v1 prefix since baseURL already includes it
 export const API_ENDPOINTS = {
-  // Auth endpoints
-  login: '/api/v1/auth/login',
-  register: '/api/v1/auth/register',
-  refresh: '/api/v1/auth/refresh',
-  logout: '/api/v1/auth/logout',
-  blacklist: '/api/v1/auth/blacklist',
-  changePassword: '/api/v1/auth/change-password',
-  requestPasswordReset: '/api/v1/auth/request-password-reset',
-  resetPassword: '/api/v1/auth/reset-password',
-  verifyEmail: '/api/v1/auth/verify-email',
-  verifyPhone: '/api/v1/auth/verify-phone',
-  sendOtp: '/api/v1/auth/send-otp',
-  mfaSetup: '/api/v1/auth/mfa/setup',
-  mfaVerify: '/api/v1/auth/mfa/verify',
-  mfaDisable: '/api/v1/auth/mfa/disable',
+  // Auth endpoints - baseURL already has /api/v1
+  login: '/auth/login',
+  register: '/auth/register',
+  refresh: '/auth/refresh',
+  logout: '/auth/logout',
+  blacklist: '/auth/blacklist',
+  changePassword: '/auth/change-password',
+  requestPasswordReset: '/auth/request-password-reset',
+  resetPassword: '/auth/reset-password',
+  verifyEmail: '/auth/verify-email',
+  verifyPhone: '/auth/verify-phone',
+  sendOtp: '/auth/send-otp',
+  mfaSetup: '/auth/mfa/setup',
+  mfaVerify: '/auth/mfa/verify',
+  mfaDisable: '/auth/mfa/disable',
 } as const;
 
 export const AUTH_CONFIG = {
