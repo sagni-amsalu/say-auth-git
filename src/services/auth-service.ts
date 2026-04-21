@@ -11,11 +11,11 @@ import { AuthState, LoginCredentials, MFASetup, RegisterData, User } from '../ty
 import { API_ENDPOINTS } from '../utils/constants';
 
 // ============= Response Types =============
-interface ApiResponse<T = any> {
-  data?: T;
-  message?: string;
-  statusCode?: number;
-}
+// interface ApiResponse<T = any> {
+//   data?: T;
+//   message?: string;
+//   statusCode?: number;
+// }
 
 interface LoginResponseData {
   user: User;
@@ -234,9 +234,13 @@ export class AuthService {
 
     try {
       const response = await this.makeRequest('POST', API_ENDPOINTS.login, credentials);
+
+      console.log(`response-1-${JSON.stringify(response)}`)
       
       // ✅ Robust data extraction - handles both wrapped and unwrapped responses
       const data = this.extractData<LoginResponseData>(response);
+
+       console.log(`data-1-${JSON.stringify(data)}`)
       
       // Check if MFA is required
       if (data.requiresMFA) {
