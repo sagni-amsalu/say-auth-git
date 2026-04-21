@@ -22,14 +22,14 @@ interface LoginResponseData {
   requiresMFA?: boolean;
 }
 
-interface RegisterResponseData {
-  user: User;
-  tokens: {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: number;
-  };
-}
+// interface RegisterResponseData {
+//   user: User;
+//   tokens: {
+//     accessToken: string;
+//     refreshToken: string;
+//     expiresIn: number;
+//   };
+// }
 
 interface RefreshResponseData {
   accessToken: string;
