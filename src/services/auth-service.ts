@@ -11,12 +11,6 @@ import { AuthState, LoginCredentials, MFASetup, RegisterData, User } from '../ty
 import { API_ENDPOINTS } from '../utils/constants';
 
 // ============= Response Types =============
-// interface ApiResponse<T = any> {
-//   data?: T;
-//   message?: string;
-//   statusCode?: number;
-// }
-
 interface LoginResponseData {
   user: User;
   tokens: {
@@ -92,24 +86,56 @@ export class AuthService {
     return this.auditEnabled;
   }
 
-  // ============ Robust Data Extraction ============
+  // ============ Deep Data Extraction (Handles Multiple Wrappers) ============
   
   /**
-   * Extract data from response - handles both wrapped { data: {...} } and unwrapped {...} formats
+   * Recursively unwrap nested data objects
+   * Handles responses like: { data: { data: { data: { ... } } } }
    */
-  private extractData<T>(response: any): T {
-    // Handle null/undefined
-    if (!response) {
-      throw new Error('Empty response received');
+  private deepUnwrap<T>(obj: any): T {
+    if (!obj || typeof obj !== 'object') {
+      return obj;
     }
     
-    // Handle { data: {...} } wrapper (your backend format)
-    if (response.data && typeof response.data === 'object') {
-      return response.data as T;
+    // If object has a 'data' property, recursively unwrap it
+    if (obj.data && typeof obj.data === 'object') {
+      return this.deepUnwrap(obj.data);
     }
     
-    // Handle direct response (already unwrapped)
-    return response as T;
+    // No more data wrappers, return the object
+    return obj as T;
+  }
+
+  /**
+   * Extract user and tokens from deeply nested response
+   */
+  private extractLoginData(response: any): LoginResponseData {
+    // First, deep unwrap all the data wrappers
+    const unwrapped = this.deepUnwrap<any>(response);
+    
+    // Now look for user and tokens in the unwrapped object
+    let user = unwrapped.user;
+    let tokens = unwrapped.tokens;
+    let sessionId = unwrapped.sessionId;
+    let requiresMFA = unwrapped.requiresMFA;
+    
+    // If not found at top level, search deeper
+    if (!user && unwrapped.data) {
+      user = unwrapped.data.user;
+      tokens = unwrapped.data.tokens;
+      sessionId = unwrapped.data.sessionId;
+      requiresMFA = unwrapped.data.requiresMFA;
+    }
+    
+    // If still not found, try one more level
+    if (!user && unwrapped.data?.data) {
+      user = unwrapped.data.data.user;
+      tokens = unwrapped.data.data.tokens;
+      sessionId = unwrapped.data.data.sessionId;
+      requiresMFA = unwrapped.data.data.requiresMFA;
+    }
+    
+    return { user, tokens, sessionId, requiresMFA };
   }
 
   // ============ Retry Logic & Health Check ============
@@ -234,13 +260,15 @@ export class AuthService {
 
     try {
       const response = await this.makeRequest('POST', API_ENDPOINTS.login, credentials);
-
-      console.log(`response-1-${JSON.stringify(response)}`)
       
-      // ✅ Robust data extraction - handles both wrapped and unwrapped responses
-      const data = this.extractData<LoginResponseData>(response);
-
-       console.log(`data-1-${JSON.stringify(data)}`)
+      // ✅ Use deep extraction for nested response
+      const data = this.extractLoginData(response);
+      
+      console.log('✅ Extracted login data:', { 
+        hasUser: !!data.user, 
+        hasTokens: !!data.tokens,
+        requiresMFA: data.requiresMFA 
+      });
       
       // Check if MFA is required
       if (data.requiresMFA) {
@@ -254,10 +282,12 @@ export class AuthService {
       
       // Validate required fields
       if (!data.user) {
+        console.error('❌ No user data found in response');
         throw new Error('No user data in response');
       }
       
       if (!data.tokens?.accessToken || !data.tokens?.refreshToken) {
+        console.error('❌ No tokens found in response');
         throw new Error('No tokens in response');
       }
       
@@ -346,7 +376,7 @@ export class AuthService {
       trustDevice,
     });
     
-    const data = this.extractData<LoginResponseData>(response);
+    const data = this.extractLoginData(response);
     
     if (!data.user || !data.tokens) {
       throw new Error('Invalid response from server');
@@ -363,6 +393,15 @@ export class AuthService {
     
     sessionStorage.removeItem('temp_auth_email');
     sessionStorage.removeItem('temp_auth_user_id');
+    
+    if (this.auditEnabled) {
+      await AuditLogger.getInstance().log({
+        action: AuditAction.MFA_VERIFIED,
+        userId: data.user.id,
+        email: data.user.email,
+        success: true,
+      });
+    }
     
     this.updateState({
       user: data.user,
@@ -384,25 +423,26 @@ export class AuthService {
     try {
       const response = await this.makeRequest('POST', API_ENDPOINTS.register, data);
       
-      // ✅ Robust data extraction
-      const extractedData = this.extractData<RegisterResponseData>(response);
+      // ✅ Use deep unwrapping
+      const unwrapped = this.deepUnwrap<any>(response);
+      const user = unwrapped.user || unwrapped.data?.user;
+      const tokens = unwrapped.tokens || unwrapped.data?.tokens;
       
-      if (!extractedData.user) {
+      if (!user) {
         throw new Error('No user data in response');
       }
       
-      if (!extractedData.tokens?.accessToken) {
+      if (!tokens?.accessToken) {
         throw new Error('No tokens in response');
       }
       
-      const user = extractedData.user;
-      const tokens = {
-        accessToken: extractedData.tokens.accessToken,
-        refreshToken: extractedData.tokens.refreshToken,
-        expiresIn: extractedData.tokens.expiresIn || 900,
+      const tokenData = {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        expiresIn: tokens.expiresIn || 900,
       };
       
-      SecureTokenStorage.getInstance().setTokens(tokens);
+      SecureTokenStorage.getInstance().setTokens(tokenData);
       SecureTokenStorage.getInstance().setUser(user);
       
       if (this.auditEnabled) {
@@ -416,7 +456,7 @@ export class AuthService {
       
       this.updateState({
         user,
-        tokens,
+        tokens: tokenData,
         isAuthenticated: true,
         isLoading: false,
         error: null,
@@ -495,7 +535,7 @@ export class AuthService {
         refreshToken: tokens.refreshToken,
       });
       
-      const data = this.extractData<RefreshResponseData>(response);
+      const data = this.deepUnwrap<RefreshResponseData>(response);
       
       if (!data.accessToken) {
         throw new Error('No access token in refresh response');
@@ -592,7 +632,7 @@ export class AuthService {
 
   async setupMFA(): Promise<MFASetup> {
     const response = await this.makeRequest('POST', API_ENDPOINTS.mfaSetup);
-    return this.extractData<MFASetup>(response);
+    return this.deepUnwrap<MFASetup>(response);
   }
 
   async disableMFA(code: string): Promise<void> {
@@ -611,7 +651,7 @@ export class AuthService {
 
   async updateUser(userData: Partial<User>): Promise<User> {
     const response = await this.makeRequest('PUT', '/users/profile', userData);
-    const updatedUser = this.extractData<User>(response);
+    const updatedUser = this.deepUnwrap<User>(response);
     
     // Update stored user
     SecureTokenStorage.getInstance().setUser(updatedUser);
@@ -619,5 +659,33 @@ export class AuthService {
     this.updateState({ user: updatedUser });
     
     return updatedUser;
+  }
+
+  async requestPasswordReset(email: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.makeRequest('POST', API_ENDPOINTS.requestPasswordReset, { email });
+    return this.deepUnwrap(response);
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.makeRequest('POST', API_ENDPOINTS.resetPassword, {
+      token,
+      newPassword,
+    });
+    return this.deepUnwrap(response);
+  }
+
+  async verifyEmail(email: string, code: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.makeRequest('POST', API_ENDPOINTS.verifyEmail, { email, code });
+    return this.deepUnwrap(response);
+  }
+
+  async verifyPhone(phone: string, code: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.makeRequest('POST', API_ENDPOINTS.verifyPhone, { phone, code });
+    return this.deepUnwrap(response);
+  }
+
+  async sendOtp(type: 'EMAIL' | 'PHONE', target: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.makeRequest('POST', API_ENDPOINTS.sendOtp, { type, target });
+    return this.deepUnwrap(response);
   }
 }
