@@ -20,7 +20,7 @@ export { useAuth } from './hooks/useAuth';
 export { useProtectedRoute } from './hooks/useProtectedRoute';
 export { useAuthContext } from './components/AuthProvider';
 
-// Components - ADD THE MISSING EXPORTS HERE
+// Components
 export { AuthProvider } from './components/AuthProvider';
 export { ProtectedRoute } from './components/ProtectedRoute';
 export { LoginForm } from './components/LoginForm';
@@ -38,6 +38,21 @@ export { withAuth } from './components/AuthProvider';
 
 // Interceptors
 export { setupAuthInterceptors } from './interceptors/axios-interceptors';
+
+// ✅ ADD THESE TWO EXPORTS - Critical for direct axios access
+import { AuthService } from './services/auth-service';
+
+/**
+ * Pre-configured authenticated axios instance
+ * Use this for making authenticated API calls directly
+ */
+export const authAxios = AuthService.getInstance().getAxiosInstance();
+
+/**
+ * Function to get a fresh authenticated axios instance
+ * Use this if you need to ensure the latest instance
+ */
+export const getAuthAxios = () => AuthService.getInstance().getAxiosInstance();
 
 // Utils
 export { cn, getErrorMessage, isValidEmail, formatDate, generateRandomString } from './utils/helpers';
